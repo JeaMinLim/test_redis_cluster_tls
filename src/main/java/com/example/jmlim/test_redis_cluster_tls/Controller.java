@@ -29,12 +29,30 @@ public class Controller {
     @RequestMapping("/connect")
     public String connectRedis() {
         List<RedisURI> redisURIs = Arrays.asList(
-            RedisURI.Builder.redis("127.0.0.1", 6379).build(),
-            RedisURI.Builder.redis("127.0.0.1", 6380).build(),
-            RedisURI.Builder.redis("127.0.0.1", 6381).build(),
-            RedisURI.Builder.redis("127.0.0.1", 6382).build(),
-            RedisURI.Builder.redis("127.0.0.1", 6383).build(),
-            RedisURI.Builder.redis("127.0.0.1", 6384).build()
+            RedisURI.Builder.redis("127.0.0.1", 6379)
+                            .withSsl(true)
+                            .withVerifyPeer(false)
+                            .build(),
+            RedisURI.Builder.redis("127.0.0.1", 6380)
+                            .withSsl(true)
+                            .withVerifyPeer(false)
+                            .build(),
+            RedisURI.Builder.redis("127.0.0.1", 6381)
+                            .withSsl(true)
+                            .withVerifyPeer(false)
+                            .build(),
+            RedisURI.Builder.redis("127.0.0.1", 6382)
+                            .withSsl(true)
+                            .withVerifyPeer(false)
+                            .build(),
+            RedisURI.Builder.redis("127.0.0.1", 6383)
+                            .withSsl(true)
+                            .withVerifyPeer(false)
+                            .build(),
+            RedisURI.Builder.redis("127.0.0.1", 6384)
+                            .withSsl(true)
+                            .withVerifyPeer(false)
+                            .build()
         );
 
         RedisClusterClient clusterClient = RedisClusterClient.create(redisURIs);
