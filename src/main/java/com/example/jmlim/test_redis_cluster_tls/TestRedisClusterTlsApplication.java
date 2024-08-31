@@ -9,5 +9,4 @@ public class TestRedisClusterTlsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TestRedisClusterTlsApplication.class, args);
 	}
-
 }
