@@ -33,7 +33,8 @@ build/
 .vscode/
 
 ### certs ###
-*.cert
+*.crt
 *.jks
 *.key
 *.p12
+.keystore

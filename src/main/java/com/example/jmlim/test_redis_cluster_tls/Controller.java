@@ -1,32 +1,31 @@
 package com.example.jmlim.test_redis_cluster_tls;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.cluster.RedisClusterClient;
 import io.lettuce.core.cluster.api.StatefulRedisClusterConnection;
 import io.lettuce.core.cluster.api.sync.RedisAdvancedClusterCommands;
-import io.lettuce.core.cluster.ClusterClientOptions;
-import io.lettuce.core.cluster.ClusterTopologyRefreshOptions;
-import io.lettuce.core.cluster.models.partitions.Partitions;
-import io.lettuce.core.cluster.models.partitions.RedisClusterNode;
+import io.lettuce.core.cluster.RedisClusterClient;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 public class Controller {
 
+    @Autowired
+    private RedisClusterClient redisClusterClient;
+
     @RequestMapping("/")
     public String index() {
-        return "This is index page";
+        return 
+        "<h1>This is index page <h1> <br /> <p> /connect/without or /connect/verify </p>";
     }
     
-    @RequestMapping("/connect")
+    @RequestMapping("/connect/without")
     public String connectRedis() {
         List<RedisURI> redisURIs = Arrays.asList(
             RedisURI.Builder.redis("127.0.0.1", 6379)
@@ -59,12 +58,21 @@ public class Controller {
         StatefulRedisClusterConnection<String, String> connection = clusterClient.connect();
         RedisAdvancedClusterCommands<String, String> syncCommands = connection.sync();
 
-        String raw_result = syncCommands.clusterNodes();
+        String rawResult = syncCommands.clusterNodes();
 
         connection.close();
         clusterClient.shutdown();
 
-        return raw_result;
-    }    
+        return rawResult;
+    }   
+
+    @RequestMapping("/connect/verify")
+    public String connectRedisVerify() {
+        RedisAdvancedClusterCommands<String, String> commands = redisClusterClient.connect().sync();
+        String clusterNodes = commands.clusterNodes();
+        redisClusterClient.shutdown();
+        return clusterNodes;
+    }
+            
 }
 
