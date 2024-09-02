@@ -27,28 +27,18 @@ After run openssl and keytool, you will get ```client.jks``` and ```client.keyst
 
 -------
 
-인증서 파일을 PEM 형식으로 변환
-openssl x509 -in ./ca.crt -out ./jks/ca.pem -outform PEM
-openssl x509 -in ./redis.crt -out ./jks/redis.pem -outform PEM
-openssl rsa -in ./redis.key -out ./jks/redis-key.pem -outform PEM
+## How to convert certificate to JKS
 
-openssl x509 -in ./ca.crt -out ./jks/ca.pem -outform PEM
-openssl x509 -in ./server.crt -out ./jks/server.pem -outform PEM
-openssl rsa -in ./server.key -out ./jks/server-key.pem -outform PEM
-
+### 1. Convert client certificates to PEM format
 openssl x509 -in ./ca.crt -out ./jks/ca.pem -outform PEM
 openssl x509 -in ./client.crt -out ./jks/client.pem -outform PEM
 openssl rsa -in ./client.key -out ./jks/client-key.pem -outform PEM
 
-PEM 형식의 인증서를 PKCS12 형식으로 변환
-(비밀번호가 없으면 -password 생략)
-openssl pkcs12 -export -in ./jks/redis.pem -inkey ./jks/redis-key.pem -out ./jks/redis.p12 -name redis -CAfile ./jks/ca.pem -caname root -password redis1
+### 2. Convert client certificates to PKCS12 format from PEM
+(if your certificate didn`t have password, delete ```-password```)
+openssl pkcs12 -export -in ./jks/client.pem -inkey ./jks/client-key.pem -out ./jks/client.p12 -name redis -CAfile ./jks/ca.pem -caname root -password CHANGEIT!
 
-openssl pkcs12 -export -in ./jks/server.pem -inkey ./jks/server-key.pem -out ./jks/server.p12 -name redis -CAfile ./jks/ca.pem -caname root -password redis1
-
-
-openssl pkcs12 -export -in ./jks/client.pem -inkey ./jks/client-key.pem -out ./jks/client.p12 -name redis -CAfile ./jks/ca.pem -caname root -password redis1
-
-PKCS12 형식을 JKS로 변환
-keytool -importkeystore -srckeystore tests/tls/redis.p12 -srcstoretype PKCS12 -destkeystore tests/tls/truststore.jks -deststoretype JKS -srcstorepass changeit -deststorepass redis1
+### 3. Convert client certificates to JKS format from PKCS12 
+(if your certificate didn`t have password, delete ```-srcstorepass``` ```-deststorepass```)
+keytool -importkeystore -srckeystore ./jks/client.p12 -srcstoretype PKCS12 -destkeystore ./jks/client.jks -deststoretype JKS -srcstorepass CHANGEIT! -deststorepass CHANGEIT!
 
