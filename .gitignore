@@ -37,4 +37,4 @@ build/
 *.jks
 *.key
 *.p12
-.keystore
+*.keystore
