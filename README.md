@@ -32,8 +32,6 @@ After run openssl and keytool, you will get ```client.jks``` and ```client.keyst
 ### 1. Convert client certificates to PEM format
 ```Shell
 openssl x509 -in ./ca.crt -out ./jks/ca.pem -outform PEM
-```
-```Shell
 openssl x509 -in ./client.crt -out ./jks/client.pem -outform PEM
 openssl rsa -in ./client.key -out ./jks/client-key.pem -outform PEM
 ```
@@ -42,7 +40,7 @@ openssl rsa -in ./client.key -out ./jks/client-key.pem -outform PEM
 (if your certificate didn`t have password, delete ```-password```)
 ```Shell
 openssl pkcs12 -export -in ./jks/client.pem -inkey ./jks/client-key.pem -out ./jks/client.p12 -name redis -CAfile ./jks/ca.pem -caname root -password CHANGEIT!
-```Shell
+```
 
 ### 3. Convert client certificates to JKS format from PKCS12 
 (if your certificate didn`t have password, delete ```-srcstorepass``` ```-deststorepass```)
